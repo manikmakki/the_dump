@@ -1,11 +1,11 @@
 #!/bin/bash
-exec &>> /home/pi/script_logs/watcher_do.log
+exec &>> ##/path/to/this.log##
 
 # THIS IS AN ALWAYS RUNNING LOOP
 while true; do
 
 # THIS KEEPS THE OUPUT OF THE inotifywait AS A VARIABLE NAMED watcherOut
-watcherOut="$(sudo inotifywait -e modify,create,delete /smb_share  )"
+watcherOut="$(sudo inotifywait -e modify,create,delete ##/path/to/share##  )"
 #echo OUTPUT : $watcherOut
 
 # THIS GRABS THE EVERYTHING FROM THE RIGHT OF  "(anything)[space](anything)[space]" or "/share/ CREATE "
@@ -35,13 +35,13 @@ if [ "$fileAction" = "CREATE" ]
 		echo `date` - CREATED $nameFile
 		if [ "$fileExt" = "png" ]
 			then
-				echo `date` - COPYING $nameFile to /slides >> /home/pi/script_logs/watcher_do.log
-				sudo cp /smb_share/$nameFile /slides/ &
+				echo `date` - COPYING $nameFile to /slides
+				sudo cp ##/path/to/share##/$nameFile /slides/ &
 		fi
 		if [ "$fileExt" = "pptx" ]
 			then
 				echo `date` - RUNNING copy, export, purge of $nameFile in  /staging >> /home/pi/script_logs/watcher_do.log
-				(sudo cp /smb_share/$nameFile /staging ; sudo pptx2pdf -i /staging/$nameFile -o /slides -p; sudo rm /staging/$fileName*; sudo rm /slides/$fileName.pdf; echo `date` - DONE exporting $nameFile) &
+				(sudo cp ##/path/to/share##/$nameFile /staging ; sudo pptx2pdf -i /staging/$nameFile -o /slides -p; sudo rm /staging/$fileName*; sudo rm /slides/$fileName.pdf; echo `date` - DONE exporting $nameFile) &
 		fi
 fi
 if [ "$fileAction" = "MODIFY" ]
@@ -49,8 +49,8 @@ if [ "$fileAction" = "MODIFY" ]
 		echo `date` - MODIFIED $nameFile 
 		if [ "$fileExt" = "png" ]
 			then
-				echo `date` - OVERWRITING $nameFile in /slides >> /home/pi/script_logs/watcher_do.log
-				sudo cp /smb_share/$nameFile /slides &
+				echo `date` - OVERWRITING $nameFile in /slides
+				sudo cp ##/path/to/share##/$nameFile /slides &
 		fi
 		if [ "$fileExt" = "pptx" ]
 			then
@@ -63,12 +63,12 @@ if [ "$fileAction" = "DELETE" ]
 		echo `date` - DELETED $nameFile
 		if [ "$fileExt" = "png" ]
 			then
-				echo `date` - REMOVING $nameFile from /slides >> /home/pi/script_logs/watcher_do.log
+				echo `date` - REMOVING $nameFile from /slides
 				sudo rm /slides/$nameFile &
 		fi
 		if [ "$fileExt" = "pptx" ]
 			then
-				echo `date` - DELETING $nameFile from /slides >> /home/pi/script_logs/watcher_do.log
+				echo `date` - DELETING $nameFile from /slides
 				sudo rm /slides/$fileName* &
 		fi
 fi
