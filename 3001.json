@@ -1,3 +1,5 @@
+/// Forked from https://gist.github.com/mikenabhan/cb46887f488b815fd0a4cbbd557e3da6
+/// Cleaned up JSON, tested working with DIY-36-HP-WMAH-230B, HAOS v. 2021.12.10, SmartIR v. 1.17.6
 {
     "manufacturer": "MrCool",
     "supportedModels": [
